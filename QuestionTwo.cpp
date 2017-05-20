@@ -14,6 +14,17 @@ struct node
 {
     int value;
     node* next =NULL;
+    
+    node(int v)
+    {
+        value = v;
+        next = NULL;
+    }
+    
+    void setNext(node *nxt)
+    {
+        next = nxt;
+    }
 };
 
 node* findKToLastElement(node* head, int k)
@@ -30,9 +41,10 @@ node* findKToLastElement(node* head, int k)
     }
     
     if(k > length) return NULL;
+    //if(k == 0) k = 1;
     temp = head;
     
-    for(int i=1; i<length; i++)
+    for(int i=1; i<length-k; i++)
         temp = temp->next;
     
     return temp;
@@ -46,6 +58,17 @@ int main()
     
     // create the linked list
     
-    node* head = new node();
-    findKToLastElement(head, k);
+    node* nodes[10];
+    
+    for(int i=1; i <=10; i++)
+    {
+        nodes[i] = new node(i);
+        if(i)
+            nodes[i-1]->setNext(nodes[i]);
+    }
+    
+    node* result = findKToLastElement(nodes[0], k);
+    
+    cout<<"Value "<<result->value<<endl;
+    
 }
