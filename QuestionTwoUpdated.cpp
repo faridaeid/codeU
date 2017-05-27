@@ -69,6 +69,12 @@ int main()
     
     node* result = findKToLastElement(nodes[0], k);
     
+    for(int i=1; i <=10; i++)
+    {
+        delete nodes[i];
+    }
+    
+    
     cout<<"Value "<<result->value<<endl;
     
 }
