@@ -40,8 +40,8 @@ node* findKToLastElement(node* head, int k)
         temp = temp->next;
     }
     
-    if(k > length) return NULL;
-    //if(k == 0) k = 1;
+    if(k >= length || k < 0) return NULL;
+    
     temp = head;
     
     for(int i=1; i<length-k; i++)
