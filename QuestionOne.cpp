@@ -1,10 +1,4 @@
-//
-//  main.cpp
-//  Codu
-//
-//  Created by Farida Eid on 5/18/17.
-//  Copyright © 2017 Farida Eid. All rights reserved.
-//
+
 
 #include <iostream>
 #include <string>
