@@ -70,8 +70,12 @@ int main()
                 cout<<answer[i]<<endl;
         }
         else
+        {
             cout<<"This is the root, no Ancestors"<<endl;
+        }
     }
     else
+    {
         cout<<"Key Not found"<<endl;
+    }
 }
