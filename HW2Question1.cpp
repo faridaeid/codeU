@@ -18,18 +18,18 @@ struct treeNode
     treeNode *right;
     
     treeNode(int v):value(v), left(NULL), right(NULL){}
-
+    
 };
 
-bool printAncestors(treeNode *head, int key, vector<int>& answer)
+bool getAncestors(treeNode *head, int key, vector<int>* answer)
 {
     if(head == NULL) return false;
     if(head->value == key) return true;
     
     // if present in left or right substree then add the node to the print array
-    if(printAncestors(head->left, key, answer) || printAncestors(head->right, key, answer))
+    if(getAncestors(head->left, key, answer) || getAncestors(head->right, key, answer))
     {
-        answer.push_back(head->value);
+        answer->push_back(head->value);
         return true;
     }
     
@@ -43,7 +43,7 @@ int main()
     cin>>key;
     
     
-    // constructing thee tree in the assignment handout
+    // constructing the tree in the assignment handout
     treeNode* head = new treeNode(16);
     head->left = new treeNode(9);
     head->right = new treeNode(18);
@@ -61,7 +61,7 @@ int main()
     
     
     vector<int> answer;
-    if(printAncestors(head, key, answer))
+    if(getAncestors(head, key, &answer))
     {
         if(answer.size())
         {
