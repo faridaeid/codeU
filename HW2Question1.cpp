@@ -17,13 +17,13 @@ struct treeNode
     treeNode *left;
     treeNode *right;
     
-    treeNode(int v):value(v), left(NULL), right(NULL){}
+    treeNode(int v):value(v), left(nullptr), right(nullptr){}
     
 };
 
 bool getAncestors(treeNode *head, int key, vector<int>* answer)
 {
-    if(head == NULL) return false;
+    if(head == nullptr) return false;
     if(head->value == key) return true;
     
     // if present in left or right substree then add the node to the print array
