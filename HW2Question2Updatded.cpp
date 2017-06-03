@@ -27,12 +27,13 @@ bool checkNodeInTree(treeNode* root, int key)
 {
     if(root == nullptr) return false;
     if(root->value == key) return true;
-    else return (checkNodeInTree(root->left, key) || checkNodeInTree(root->right, key));
+    return (checkNodeInTree(root->left, key) || checkNodeInTree(root->right, key));
 }
 
-/// get lowest common ancestor
+/// get lowest common ancestor, recursive function, keeps on traversing until one of the keys are found or one of
+// the keys is on the left subtree and the other is on the right subtree
 
-treeNode* lowestCommonAncestor(treeNode *head, int key1, int key2)
+treeNode* lowestCommonAncestorPrivate(treeNode *head, int key1, int key2)
 {
     if(head == nullptr) return nullptr;
     
@@ -40,8 +41,8 @@ treeNode* lowestCommonAncestor(treeNode *head, int key1, int key2)
     if(head->value == key1 || head->value == key2)
         return head;
     
-    treeNode* left = lowestCommonAncestor(head->left, key1, key2);
-    treeNode* right = lowestCommonAncestor(head->right, key1, key2);
+    treeNode* left = lowestCommonAncestorPrivate(head->left, key1, key2);
+    treeNode* right = lowestCommonAncestorPrivate(head->right, key1, key2);
     
     // if both left and right are not null then one key is present in the left subtree
     // and the other is present in the right substree so the LCA is the current root
@@ -52,6 +53,36 @@ treeNode* lowestCommonAncestor(treeNode *head, int key1, int key2)
     else        // both are in left or both are in right
         return (left != nullptr) ? left : right;
     
+}
+
+ treeNode* lowestCommonAncestor(treeNode *head, int key1, int key2)
+{
+    if( key1 == key2)
+    {
+       cout<<"Both keys are the same\n";
+        return nullptr;
+    }
+    
+    else if(checkNodeInTree(head, key1) && checkNodeInTree(head, key1))
+    {
+        return lowestCommonAncestorPrivate(head, key1, key2);
+    }
+    else
+    {
+        cout<<"One or both of the keys are not in the tree"<<endl;
+        return nullptr;
+    }
+
+}
+
+void deleteNodes(treeNode* head)
+{
+    if(head == nullptr) return;
+    
+    if(head->left != nullptr) deleteNodes(head->left);
+    if(head->right != nullptr) deleteNodes(head->right);
+    
+    delete head;
 }
 
 
@@ -77,14 +108,11 @@ int main()
     treeNode *right = head->right;
     right->right = new treeNode(19);
     
-    if(checkNodeInTree(head, key1) && checkNodeInTree(head, key1) )
-    {
-        treeNode* answer = lowestCommonAncestor(head, key1, key2);
+    
+    treeNode* answer = lowestCommonAncestor(head, key1, key2);
+    if(answer != nullptr)
         cout<<"LCA = "<<answer->value<<endl;
-    }
-    else
-    {
-        cout<<"One or both of the keys are not in the tree"<<endl;
-    }
-
+    
+    deleteNodes(head);
+    
 }
