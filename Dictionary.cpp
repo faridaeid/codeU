@@ -21,12 +21,12 @@ void Dictionary::loadDictionary()
     ifstream file;
     file.open(path);
     
-    string temp;
+    string word;
     
     while(!file.eof())
     {
-        file>>temp;
-        words.insert(temp);
+        file>>word;
+        words.insert(word);
         
         for(int i=1; i<=temp.length(); i++)
             prefixex.insert(temp.substr(0, i));
@@ -37,10 +37,10 @@ void Dictionary::loadDictionary()
 
 bool Dictionary::isWord(const string& word)
 {
-    return (words.find(word) != words.end());
+    return words.find(word) != words.end();
 }
 
 bool Dictionary::isPrefix(const string& word)
 {
-    return (prefixex.find(word) != prefixex.end());
+    return prefixex.find(word) != prefixex.end();
 }
