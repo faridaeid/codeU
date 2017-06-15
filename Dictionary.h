@@ -10,6 +10,7 @@
 #define Dictionary_h
 
 #include <string> 
+#include <vector>
 #include <set>
 
 using namespace std;
@@ -18,15 +19,15 @@ class Dictionary
 {
     
 private:
-    string path;
-    void loadDictionary();
+    void loadDictionary(vector<string>*);
     set<string> words;
     set<string> prefixex;
 
 public:
-    Dictionary();
+    Dictionary(vector<string>*);
     bool isWord(const string&);
     bool isPrefix(const string&);
+    void addWord(const string&);
     
     
 };
