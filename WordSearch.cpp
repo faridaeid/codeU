@@ -8,7 +8,7 @@
 
 #include "WordSearch.h"
 
-WordSearch::WordSearch(int r, int c, vector<vector<char>>* g, Dictionary* d): rows(r), cols(c), grid(g), dict(d){}
+WordSearch::WordSearch(int r, int c, vector<string>* g, Dictionary* d): rows(r), cols(c), grid(g), dict(d){}
 
 
 // Public function that can be called to get the words in the grid
@@ -32,20 +32,16 @@ void WordSearch::traverseGrid(int row, int col, string current)
     if(dict->isWord(current)) words.insert(current);
     visited[row][col] = true;
     
-    int newRow, newCol;
-    for(int i=-1; i<2; i++)
-    {
-        newRow = row + i;
+    for(int newRow= row - 1; newRow<=row + 1; newRow++)
         if(newRow >=0 && newRow < rows)
         {
-            for(int j=-1; j<2; j++)
+            for(int newCol= col - 1; newCol <= col + 1; newCol++)
             {
-                newCol = col + j;
                 if(newCol >= 0 && newCol < cols && !visited[newRow][newCol])
                     traverseGrid(newRow, newCol, current);
             }
         }
-    }
+    
     
     visited[row][col] = false;
 }
