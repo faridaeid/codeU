@@ -28,12 +28,12 @@ void Dictionary::loadDictionary(vector<string>* wordsList)
 
 bool Dictionary::isWord(const string& word)
 {
-    return (words.find(word) != words.end());
+    return words.find(word) != words.end();
 }
 
 bool Dictionary::isPrefix(const string& word)
 {
-    return (prefixex.find(word) != prefixex.end());
+    return prefixex.find(word) != prefixex.end();
 }
 
 void Dictionary::addWord(const string& word)
