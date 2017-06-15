@@ -10,37 +10,36 @@
 #include <fstream>
 
 
-Dictionary::Dictionary()
+Dictionary::Dictionary(vector<string>* wordsList)
 {
-    path = "/Users/faridaeid/Desktop/Desktop/Code/Porjects Xcode/Codu/dictionary.txt";
-    loadDictionary();
+    loadDictionary(wordsList);
 }
 
-void Dictionary::loadDictionary()
+
+void Dictionary::loadDictionary(vector<string>* wordsList)
 {
-    ifstream file;
-    file.open(path);
-    
     string word;
-    
-    while(!file.eof())
+    for(int index = 0; index < wordsList->size(); index++)
     {
-        file>>word;
-        words.insert(word);
-        
-        for(int i=1; i<=temp.length(); i++)
-            prefixex.insert(temp.substr(0, i));
+        word = (*wordsList)[index];
+        addWord(word);
     }
-    
-    file.close();
 }
 
 bool Dictionary::isWord(const string& word)
 {
-    return words.find(word) != words.end();
+    return (words.find(word) != words.end());
 }
 
 bool Dictionary::isPrefix(const string& word)
 {
-    return prefixex.find(word) != prefixex.end();
+    return (prefixex.find(word) != prefixex.end());
+}
+
+void Dictionary::addWord(const string& word)
+{
+    words.insert(word);
+    
+    for(int i=1; i<=word.length(); i++)
+        prefixex.insert(word.substr(0, i));
 }
