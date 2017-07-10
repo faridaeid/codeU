@@ -8,21 +8,19 @@
 
 #include <iostream>
 #include <vector>
+#include <map>
 #include <unordered_map>
 #include <stack>
+#include <set>
 
 using namespace std;
 
 class Graph
 {
 private:
-    int currentVertices;      // number of verticies
-    vector<vector<int>>* adjList;       // vector of edges
-    unordered_map<char, int> alphaIndex;
-    unordered_map<int, char> indexAlpha;
-    void topologicalSortRecursive(int, vector<bool>&, stack<char>&);
-    int checkAddVertix(char);
-    char getChar(int);
+    map<char,set<char>> adjList;
+    unordered_map<char, bool> visited;
+    void topologicalSortRecursive(char, stack<char>&);
     
 public:
     Graph();
@@ -35,55 +33,39 @@ public:
 // Parameters: No parameters
 Graph::Graph()
 {
-    currentVertices = 0;
-    adjList = new vector<vector<int>>;
 }
 
 //Function to add edge in the graph
 //Parameters: Vertix 1 and Vertix 2
 void Graph::addEdge(char u, char v)
 {
-    int uIndex = checkAddVertix(u), vIndex = checkAddVertix(v);
-    (*adjList)[uIndex].push_back(vIndex);
-}
-
-// check if the vertix is already added in the graph or not, otherwise add it and assign an index to it
-// Parameters: The character of the vertix
-int Graph::checkAddVertix(char c)
-{
-    if(alphaIndex.find(c) == alphaIndex.end())
-    {
-        alphaIndex[c] = currentVertices;
-        indexAlpha[currentVertices++] = c;
-        adjList->push_back(vector<int>());
-    }
+    visited[u] = false;
+    visited[v] = false;
     
-    return alphaIndex[c];
+    adjList[u].insert(v);
 }
 
-// Function that gets the Index of the vertix and gets back the character
-// Parameters: The Index in the Graph
-char Graph::getChar(int c)
-{
-    return indexAlpha[c];
-}
+
 
 // Function to perform topological sort
 // Parameters: The vector of characters to save the answer in
 void Graph::topologicalSort(vector<char>& characters)
 {
     stack<char> Stack;
-    vector<bool> visited(currentVertices, false);
     
-    for(int i=0; i<currentVertices; i++)
+    map<char, set<char>>::iterator it;
+    
+    
+    for(it = adjList.begin(); it != adjList.end(); it++)
     {
-        if(!visited[i])
-            topologicalSortRecursive(i, visited, Stack);
+        if(!visited[it->first])
+            topologicalSortRecursive(it->first, Stack);
     }
     
     while(!Stack.empty())
     {
         characters.push_back(Stack.top());
+        
         Stack.pop();
     }
     
@@ -91,34 +73,39 @@ void Graph::topologicalSort(vector<char>& characters)
 
 // Recursive function to complete the topological sort
 // Paramters: Current Index, visited array to mark the vertices, Stack to add the answer
-void Graph::topologicalSortRecursive(int current, vector<bool> & visited , stack<char> & Stack)
+void Graph::topologicalSortRecursive(char current , stack<char> & Stack)
 {
     visited[current] = true;
     
-    for(int adj : (*adjList)[current])
+    set<char>::iterator it;
+
+    for(it = adjList[current].begin(); it != adjList[current].end(); it++)
     {
-        if(!visited[adj])
-            topologicalSortRecursive(adj, visited, Stack);
+        if(!visited[(*it)])
+            topologicalSortRecursive((*it), Stack);
+        
     }
     
-    Stack.push(getChar(current));
+    Stack.push(current);
 }
 
 // Function that takes a list of words, create a graph and perform topological sort
 // Parameters: list of words, list of characters to save the answer in
-void findAlphabet(const vector<string>& unknownLang, vector<char>& characters)
+vector<char> findAlphabet(const vector<string>& unknownLang)
 {
     Graph graph;
     
     string word1, word2;
     int length;
-    characters.resize(0);
+    vector<char> characters;
     
     for(int index = 0; index < unknownLang.size() -1; index++)
     {
         
         word1 = unknownLang[index];
+        
         word2 = unknownLang[index+1];
+        
         length = (int)min(word1.length(), word2.length());
         
         for(int i = 0; i < length; i++)
@@ -132,6 +119,8 @@ void findAlphabet(const vector<string>& unknownLang, vector<char>& characters)
     }
     
     graph.topologicalSort(characters);
+    
+    return characters;
 }
 
 
@@ -139,8 +128,10 @@ void findAlphabet(const vector<string>& unknownLang, vector<char>& characters)
 void printAnswer(const string& explanation, const vector<char>& characters)
 {
     cout<<explanation<<endl;
+    
     for(char ch: characters)
         cout<<ch<<" ";
+    
     cout<<endl;
 }
 
@@ -148,14 +139,15 @@ void printAnswer(const string& explanation, const vector<char>& characters)
 int main()
 {
     vector<string> unknownLang = {"ART", "RAT", "CAT", "CAR"};
+    
     vector<string> unknownLang2 = {"ART", "TRY", "RAT", "CAT", "CAR"};
+    
     vector<char> characters;
     
-    findAlphabet(unknownLang, characters);
+    characters = findAlphabet(unknownLang);
     printAnswer("Exmaple 1", characters);
     
-    findAlphabet(unknownLang2, characters);
+    characters = findAlphabet(unknownLang2);
     printAnswer("Exmaple 2", characters);
-    
-   
+
 }
