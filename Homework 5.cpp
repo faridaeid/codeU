@@ -52,14 +52,11 @@ void Graph::addEdge(char u, char v)
 void Graph::topologicalSort(vector<char>& characters)
 {
     stack<char> Stack;
-    
-    map<char, set<char>>::iterator it;
-    
-    
-    for(it = adjList.begin(); it != adjList.end(); it++)
+   
+    for(const auto &v : adjList)
     {
-        if(!visited[it->first])
-            topologicalSortRecursive(it->first, Stack);
+        if(!visited[v.first])
+            topologicalSortRecursive(v.first, Stack);
     }
     
     while(!Stack.empty())
@@ -77,12 +74,10 @@ void Graph::topologicalSortRecursive(char current , stack<char> & Stack)
 {
     visited[current] = true;
     
-    set<char>::iterator it;
-
-    for(it = adjList[current].begin(); it != adjList[current].end(); it++)
+    for(const auto &v : adjList[current])
     {
-        if(!visited[(*it)])
-            topologicalSortRecursive((*it), Stack);
+        if(!visited[v])
+            topologicalSortRecursive(v, Stack);
         
     }
     
@@ -98,24 +93,35 @@ vector<char> findAlphabet(const vector<string>& unknownLang)
     string word1, word2;
     int length;
     vector<char> characters;
+   
+    int size = unknownLang.size();
     
-    for(int index = 0; index < unknownLang.size() -1; index++)
+    if(size == 1)
     {
-        
-        word1 = unknownLang[index];
-        
-        word2 = unknownLang[index+1];
-        
-        length = (int)min(word1.length(), word2.length());
-        
-        for(int i = 0; i < length; i++)
-        {
-            if(word1[i] != word2[i])
-            {
-                graph.addEdge(word1[i], word2[i]);
-                break;
-            }
-        }
+    	for(int i=0; i<unknownLang[0].length(); i++)
+    	{
+    		characters.push_back(unknownLang[0][i]);
+    	}
+    }
+    else 
+    {
+	    for(int index = 0; size && index < size - 1; index++)
+	    {
+	        word1 = unknownLang[index];
+	        
+	        word2 = unknownLang[index+1];
+	        
+	        length = (int)min(word1.length(), word2.length());
+	        
+	        for(int i = 0; i < length; i++)
+	        {
+	            if(word1[i] != word2[i])
+	            {
+	                graph.addEdge(word1[i], word2[i]);
+	                break;
+	            }
+	        }
+	    }
     }
     
     graph.topologicalSort(characters);
@@ -142,6 +148,8 @@ int main()
     
     vector<string> unknownLang2 = {"ART", "TRY", "RAT", "CAT", "CAR"};
     
+    vector<string> unknownLang3 = {"ART"};
+    
     vector<char> characters;
     
     characters = findAlphabet(unknownLang);
@@ -149,5 +157,8 @@ int main()
     
     characters = findAlphabet(unknownLang2);
     printAnswer("Exmaple 2", characters);
+    
+    characters = findAlphabet(unknownLang3);
+    printAnswer("Example 3", characters);
 
 }
